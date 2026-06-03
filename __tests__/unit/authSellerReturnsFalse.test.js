@@ -6,6 +6,9 @@ const authSeller = (req) => {
     if (!req || !req.user) return false;
     const storeId = req.user.storeId;
     if (!storeId && storeId !== 0) return false;
+    // Validasi: hanya terima number atau string
+    const type = typeof storeId;
+    if (type !== 'number' && type !== 'string') return false;
     return storeId;
   } catch (error) {
     return false;

@@ -23,7 +23,8 @@ const cartReducer = (state = { items: [], total: 0 }, action) => {
       }
       
       const newTotal = newItems.reduce((sum, item) => {
-        const price = typeof item.price === 'number' ? item.price : 0;
+        // Validasi: price harus number dan bukan NaN
+        const price = (typeof item.price === 'number' && !Number.isNaN(item.price)) ? item.price : 0;
         const qty = typeof item.quantity === 'number' ? item.quantity : 1;
         return sum + (price * qty);
       }, 0);
