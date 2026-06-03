@@ -30,99 +30,101 @@ const imagekit = require("@/configs/imageKit").default;
 const prisma = require("@/lib/prisma").default;
 const { POST } = require("@/app/api/store/product/route");
 
-describe("IT-02: Pengujian menambahkan produk oleh penjual", () => {
+describe("Integration Test - Produk Penjual", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("harus mengembalikan 400 ketika produk tidak memiliki nama", async () => {
-    getAuth.mockReturnValue({ userId: "seller_1" });
-    authSeller.mockResolvedValue("store_1");
+  describe("IT-02: Pengujian menambahkan produk oleh penjual", () => {
+    it("harus mengembalikan 400 ketika produk tidak memiliki nama", async () => {
+      getAuth.mockReturnValue({ userId: "seller_1" });
+      authSeller.mockResolvedValue("store_1");
 
-    const mockImageFile = {
-      name: "test-image.jpg",
-      arrayBuffer: jest.fn().mockResolvedValue(new ArrayBuffer(8)),
-    };
+      const mockImageFile = {
+        name: "test-image.jpg",
+        arrayBuffer: jest.fn().mockResolvedValue(new ArrayBuffer(8)),
+      };
 
-    const formDataMap = {
-      name: "",
-      description: "Good ice cream",
-      mrp: "20000",
-      price: "15000",
-      category: "Desserts",
-    };
+      const formDataMap = {
+        name: "",
+        description: "Good ice cream",
+        mrp: "20000",
+        price: "15000",
+        category: "Desserts",
+      };
 
-    const mockRequest = {
-      formData: jest.fn().mockResolvedValue({
-        get: (key) => formDataMap[key] ?? null,
-        getAll: (key) => (key === "images" ? [mockImageFile] : []),
-      }),
-    };
+      const mockRequest = {
+        formData: jest.fn().mockResolvedValue({
+          get: (key) => formDataMap[key] ?? null,
+          getAll: (key) => (key === "images" ? [mockImageFile] : []),
+        }),
+      };
 
-    const response = await POST(mockRequest);
-    const data = await response.json();
+      const response = await POST(mockRequest);
+      const data = await response.json();
 
-    expect(response.status).toBe(400);
-    expect(data).toEqual({ error: "missing product details" });
-    expect(prisma.product.create).not.toHaveBeenCalled();
-  });
+      expect(response.status).toBe(400);
+      expect(data).toEqual({ error: "missing product details" });
+      expect(prisma.product.create).not.toHaveBeenCalled();
+    });
 
-  it("harus mengembalikan 400 ketika harga/mrp bukan angka", async () => {
-    getAuth.mockReturnValue({ userId: "seller_1" });
-    authSeller.mockResolvedValue("store_1");
+    it("harus mengembalikan 400 ketika harga/mrp bukan angka", async () => {
+      getAuth.mockReturnValue({ userId: "seller_1" });
+      authSeller.mockResolvedValue("store_1");
 
-    const mockImageFile = {
-      name: "test-image.jpg",
-      arrayBuffer: jest.fn().mockResolvedValue(new ArrayBuffer(8)),
-    };
+      const mockImageFile = {
+        name: "test-image.jpg",
+        arrayBuffer: jest.fn().mockResolvedValue(new ArrayBuffer(8)),
+      };
 
-    const formDataMap = {
-      name: "Fried Chicken",
-      description: "Delicious fried chicken",
-      mrp: "abc",
-      price: "xyz",
-      category: "Foods",
-    };
+      const formDataMap = {
+        name: "Fried Chicken",
+        description: "Delicious fried chicken",
+        mrp: "abc",
+        price: "xyz",
+        category: "Foods",
+      };
 
-    const mockRequest = {
-      formData: jest.fn().mockResolvedValue({
-        get: (key) => formDataMap[key] ?? null,
-        getAll: (key) => (key === "images" ? [mockImageFile] : []),
-      }),
-    };
+      const mockRequest = {
+        formData: jest.fn().mockResolvedValue({
+          get: (key) => formDataMap[key] ?? null,
+          getAll: (key) => (key === "images" ? [mockImageFile] : []),
+        }),
+      };
 
-    const response = await POST(mockRequest);
-    const data = await response.json();
+      const response = await POST(mockRequest);
+      const data = await response.json();
 
-    expect(response.status).toBe(400);
-    expect(data).toEqual({ error: "missing product details" });
-  });
+      expect(response.status).toBe(400);
+      expect(data).toEqual({ error: "missing product details" });
+    });
 
-  it("harus mengembalikan 400 ketika produk tidak memiliki gambar", async () => {
-    getAuth.mockReturnValue({ userId: "seller_1" });
-    authSeller.mockResolvedValue("store_1");
+    it("harus mengembalikan 400 ketika produk tidak memiliki gambar", async () => {
+      getAuth.mockReturnValue({ userId: "seller_1" });
+      authSeller.mockResolvedValue("store_1");
 
-    const formDataMap = {
-      name: "Test Product",
-      description: "A product",
-      mrp: "150000",
-      price: "120000",
-      category: "Electronics",
-    };
+      const formDataMap = {
+        name: "Test Product",
+        description: "A product",
+        mrp: "150000",
+        price: "120000",
+        category: "Electronics",
+      };
 
-    const mockRequest = {
-      formData: jest.fn().mockResolvedValue({
-        get: (key) => formDataMap[key] ?? null,
-        getAll: (key) => [],
-      }),
-    };
+      const mockRequest = {
+        formData: jest.fn().mockResolvedValue({
+          get: (key) => formDataMap[key] ?? null,
+          getAll: (key) => [],
+        }),
+      };
 
-    const response = await POST(mockRequest);
-    const data = await response.json();
+      const response = await POST(mockRequest);
+      const data = await response.json();
 
-    expect(response.status).toBe(400);
-    expect(data).toEqual({ error: "missing product details" });
-    expect(imagekit.upload).not.toHaveBeenCalled();
-    expect(prisma.product.create).not.toHaveBeenCalled();
+      expect(response.status).toBe(400);
+      expect(data).toEqual({ error: "missing product details" });
+      expect(imagekit.upload).not.toHaveBeenCalled();
+      expect(prisma.product.create).not.toHaveBeenCalled();
+    });
   });
 });

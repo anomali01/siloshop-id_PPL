@@ -21,7 +21,7 @@ jest.mock("../../inngest/client", () => ({
 
 require("../../inngest/functions");
 
-describe("Unit Test sinkronisasi pengguna", () => {
+describe("Unit Test - Sinkronisasi Pengguna", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });

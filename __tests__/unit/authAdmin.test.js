@@ -9,7 +9,7 @@ jest.mock("@clerk/nextjs/server", () => ({
 
 const authAdmin = require("@/middlewares/authAdmin").default;
 
-describe("Unit Test authorization admin", () => {
+describe("Unit Test - Otorisasi Admin", () => {
   const originalEnv = process.env;
 
   beforeEach(() => {
