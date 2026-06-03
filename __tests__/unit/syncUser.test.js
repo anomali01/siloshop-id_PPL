@@ -26,7 +26,7 @@ describe("Unit Test - Sinkronisasi Pengguna", () => {
     jest.clearAllMocks();
   });
 
-  describe("UT-01: Pengujian pembuatan pengguna dengan input tidak wajar", () => {
+  describe("UT-01: Pengujian pembuatan pengguna dengan id null", () => {
     it("harus menangani pembuatan pengguna ketika id bernilai null → prisma menerima id null", async () => {
       const mockEvent = {
         data: {

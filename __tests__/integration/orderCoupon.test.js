@@ -43,7 +43,7 @@ describe("Integration Test - Pembuatan Pesanan dan Kupon", () => {
     jest.clearAllMocks();
   });
 
-  describe("IT-01: Pengujian pembuatan pesanan dengan input tidak wajar", () => {
+  describe("IT-01: Pengujian pembuatan pesanan", () => {
     it("harus mengembalikan 401 ketika array items kosong → bug kode status salah", async () => {
       getAuth.mockReturnValue({
         userId: "user_empty_cart",
