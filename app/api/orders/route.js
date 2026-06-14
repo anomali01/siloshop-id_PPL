@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import { getAuth } from "@clerk/nextjs/server";
 import { PaymentMethod } from "@prisma/client";
 import { NextResponse } from "next/server";
+import { ensureUserExists } from "@/lib/ensureUser";
 
 export async function POST(request) {
   try {
@@ -9,8 +10,10 @@ export async function POST(request) {
     if (!userId) {
       return NextResponse.json({ error: "not authorized" }, { status: 401 });
     }
+    await ensureUserExists(userId);
     const { addressId, items, couponCode, paymentMethod } =
       await request.json();
+
 
     // Check if all reuired fields are present
     if (
@@ -140,6 +143,7 @@ export async function POST(request) {
 export async function GET(request) {
   try {
     const { userId } = getAuth(request);
+    await ensureUserExists(userId);
     const orders = await prisma.order.findMany({
       where: {
         userId,

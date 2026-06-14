@@ -1,7 +1,10 @@
 import prisma from "@/lib/prisma";
+import { ensureUserExists } from "@/lib/ensureUser";
 
 const authSeller = async (userId) => {
   try {
+    await ensureUserExists(userId);
+
     const user = await prisma.user.findUnique({
       where: { id: userId },
       include: {
@@ -9,7 +12,7 @@ const authSeller = async (userId) => {
       },
     });
 
-    if (user.store) {
+    if (user && user.store) {
       if (user.store.status !== "APPROVED") {
         return user.store.id;
       }
